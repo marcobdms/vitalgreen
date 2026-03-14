@@ -5,8 +5,6 @@ USE Crops;
 
 SHOW TABLES;
 
-DROP DATABASE Crops;
-
 CREATE TABLE Plants(
 ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 CommonName VARCHAR(255),
@@ -17,8 +15,6 @@ Diseases TEXT
 );
 
 SELECT * FROM Plants; 
-
-DROP TABLE Plants;
 
 -- isma --
 CREATE TABLE IF NOT EXISTS users (
@@ -58,10 +54,6 @@ rainfall INT NOT NULL,
 prediction INT NOT NULL,
 FOREIGN KEY (id_users) REFERENCES users(user_id)
 );
-SELECT * FROM Prediction;
-DROP TABLE Prediction;
-
-DROP TABLE User_Diseases;
 
 CREATE TABLE Diseases (
 id_Diseases INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -146,9 +138,6 @@ VALUES ('21', 'Yute', 'Corchorus capsularis', 120, 'Planta textil de fibra resis
 INSERT INTO Plants (ID, CommonName, ScientificName, CultivationTime, Characteristics, Diseases)
 VALUES ('22', 'Café', 'Coffea', 334, 'Planta tropical de la que se obtienen granos de café.', 'Roya, barrenadores del tallo');
 
-#configurar
-ALTER USER 'root'@'localhost' IDENTIFIED WITH 'mysql_native_password' BY 'root';
-#ejemplo
 INSERT INTO Prediction (id_Prediction, id_users, nitrogen, phosphorus, potassium, temperature, humidity, ph, rainfall, prediction)
 VALUES ('22', 'Café', 'Coffea', 334, 'Planta tropical de la que se obtienen granos de café.', 'Roya, barrenadores del tallo');
 

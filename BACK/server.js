@@ -13,6 +13,15 @@ const PORT = process.env.PORT || 9000;
 app.use(express.json());
 app.use(cors());
 
+// Registro de peticiones para depuración
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    if (Object.keys(req.body).length > 0) {
+        console.log('Body:', JSON.stringify(req.body, null, 2));
+    }
+    next();
+});
+
 const router = require('./routes/routes');
 app.use('/api', router);
 
@@ -60,7 +69,7 @@ app.get('/api/files', (req, res) => {
 app.get('/open-file/:filename/:cropname', (req, res) => {
     const { filename, cropname } = req.params;
     //var del resultado
-    let disease;
+    let disease = '';
 
     // crop disease script route
     const pythonScriptPath = path.join(__dirname, 'src/py/crop_disease_script.py');
@@ -82,11 +91,16 @@ app.get('/open-file/:filename/:cropname', (req, res) => {
     // Cuando el script de Python haya terminado de ejecutarse
     pythonScript.on('close', (code) => {
         if (code === 0) {
-            // Si el script se ejecutó sin errores, enviar la salida al cliente React
-            res.send(disease);
+            // Extraer solo la última línea de la salida (que debería ser 0 o 1)
+            // para ignorar los logs de carga de TensorFlow
+            const cleanOutput = disease.trim().split('\n').pop().trim();
+            const isDiseased = parseInt(cleanOutput, 10);
+            
+            // Si el script se ejecutó sin errores, enviar la salida al cliente React en formato JSON
+            res.json({ success: true, isDiseased: isDiseased });
         } else {
             // Si hubo errores en el script, enviar un mensaje de error al cliente React
-            res.status(500).send('Error en el script de Python');
+            res.status(500).json({ success: false, error: 'Error en el script de Python' });
         }
     });
 });

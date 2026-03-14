@@ -72,6 +72,10 @@ routes.post('/sign-up', userMiddleware.validateRegister, (req, res) => {
         'SELECT user_id FROM users WHERE LOWER(username) = LOWER(?)',
         [req.body.username],
         (err, result) => {
+            if (err) {
+                console.error('Error al buscar usuario existente:', err);
+                return res.status(500).send({ message: err });
+            }
             if (result && result.length) {
                 // error
                 return res.status(409).send({
@@ -90,6 +94,7 @@ routes.post('/sign-up', userMiddleware.validateRegister, (req, res) => {
                             [req.body.username, req.body.email, hash],
                             (err, result) => {
                                 if (err) {
+                                    console.error('Error al insertar nuevo usuario:', err);
                                     return res.status(400).send({
                                         message: err,
                                     });
@@ -113,6 +118,7 @@ routes.post('/login', (req, res) => {
         [req.body.username],
         (err, result) => {
             if (err) {
+                console.error('Error al buscar usuario para login:', err);
                 return res.status(400).send({
                     message: err,
                 });

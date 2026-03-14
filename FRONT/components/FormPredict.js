@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import Button from 'components/Button';
+import Button from 'components/button';
 import Link from 'next/link';
 import ResultPredict from './ResultPredict';
 

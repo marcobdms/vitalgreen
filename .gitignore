@@ -38,3 +38,5 @@
 # typescript
 /FRONT/*.tsbuildinfo
 /FRONT/next-env.d.ts
+
+/BACK/ca.pem

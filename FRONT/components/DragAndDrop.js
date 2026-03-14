@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { FileUploader } from 'react-drag-drop-files';
-import Button from 'components/Button';
+import Button from 'components/button';
 import ResultDiseases from './ResultDiseases';
 
 const fileTypes = ['JPG', 'PNG'];
@@ -37,18 +37,16 @@ function DragAndDrop() {
   //boton de enviar
   const handleSubmit = () => {
     fetch(`http://localhost:9000/open-file/${fileName}/${cropName}`)
-      .then((response) => response.text())
+      .then((response) => response.json())
       .then((data) => {
-        let split = data.split('\n');
-        split.splice(0, 3);
-        setDisease({ dis: split.join('\n'), crop: cropName })
-        // aqui se guarda el resultado de la enfermedad si esta sana aqui se graba un 0 si esta enferma se grabara un 1
-
-        setSubmit(true)
+        if (data.success) {
+          setDisease({ dis: data.isDiseased, crop: cropName });
+          setSubmit(true);
+        } else {
+          console.error("Error desde el backend:", data.error);
+        }
       })
       .catch((error) => console.error('Error:', error));
-
-
   }
 
 
