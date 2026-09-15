@@ -2,6 +2,8 @@
 
 # BACK DEPENDENCIES
 /BACK/node_modules
+/BACK/.env
+/BACK/.env.*
 
 
 #FRONT DEPENDENCIES
